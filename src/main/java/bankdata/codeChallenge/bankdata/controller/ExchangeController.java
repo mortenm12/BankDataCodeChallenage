@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.DateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +29,7 @@ public class ExchangeController {
         try {
             return objectMapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {
-            return "error"; // todo add response builder with status
+            return "error"; //better to use a response
         }
     }
 
@@ -46,11 +43,11 @@ public class ExchangeController {
             DateTime dateTimeFrom = DateTime.parse(dateFrom);
             DateTime dateTimeTo = DateTime.parse(dateTo);
             if(dateTimeFrom.isAfter(dateTimeTo)){
-                return "error"; // handle repsonse status
+                return "error"; //handle response status
             }
             return objectMapper.writeValueAsString(exchangeService.exchangeHistory(100, currency, dateTimeFrom, dateTimeTo));
         } catch (JsonProcessingException e) {
-            return "error"; // todo add response builder with status
+            return "error"; //better to use a response
         }
     }
 }
