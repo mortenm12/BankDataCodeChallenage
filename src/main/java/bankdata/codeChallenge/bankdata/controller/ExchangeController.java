@@ -37,7 +37,6 @@ public class ExchangeController {
         }
     }
 
-    //needs more api description of the format for datetime and response bad request give a 400 instead of
     @GetMapping("/history/{currency}/{dateFrom}/{dateTo}")
     ResponseEntity<String> getExchangeHistory (@PathVariable("currency") String currency,
                                @PathVariable("dateFrom") @Parameter(description = "format: yyyy-mm-dd") String dateFrom,
