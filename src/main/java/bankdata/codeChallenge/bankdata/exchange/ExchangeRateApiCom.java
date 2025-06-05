@@ -6,7 +6,9 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 public class ExchangeRateApiCom implements ExchangeRate, ExchangeHistory {
     private static final String API_BASE_URL = "https://v6.exchangerate-api.com/v6/";
@@ -34,25 +36,19 @@ public class ExchangeRateApiCom implements ExchangeRate, ExchangeHistory {
     }
 
     @Override
-    public double exchangeHistory (String currencyFrom, String currencyTo, DateTime dateTime) {
-        try {
-            int year = dateTime.getYear();
-            int month = dateTime.getMonthOfYear();
-            int day = dateTime.getDayOfMonth();
-            String urlStr = API_BASE_URL + API_TOKEN + "/history/" + currencyFrom + "/" + year + "/" + month + "/" + day;
-            URI url = new URI(urlStr);
+    public double exchangeHistory (String currencyFrom, String currencyTo, DateTime dateTime) throws URISyntaxException, IOException {
+        int year = dateTime.getYear();
+        int month = dateTime.getMonthOfYear();
+        int day = dateTime.getDayOfMonth();
+        String urlStr = API_BASE_URL + API_TOKEN + "/history/" + currencyFrom + "/" + year + "/" + month + "/" + day;
+        URI url = new URI(urlStr);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode node = objectMapper.readTree(url.toURL());
-            String result = node.get("result").asText("Error");
-            if (!result.equalsIgnoreCase("success")) {
-                return 0;
-            }
-            return node.get("conversion_rates").get(currencyTo).asDouble(0);
-
-        } catch (Exception e) {
-            //handle exceptions
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode node = objectMapper.readTree(url.toURL());
+        String result = node.get("result").asText("Error");
+        if (!result.equalsIgnoreCase("success")) {
             return 0;
         }
+        return node.get("conversion_rates").get(currencyTo).asDouble(0);
     }
 }

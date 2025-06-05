@@ -64,7 +64,7 @@ public class ExchangeController {
                 return ResponseEntity.badRequest().body("excludeDateFrom is after excludeDateTo");
             }
             return ResponseEntity.ok(objectMapper.writeValueAsString(exchangeService.exchangeHistory(100, currency, dateTimeFrom, dateTimeTo, dateTimeExcludeFrom, dateTimeExcludeTo)));
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
